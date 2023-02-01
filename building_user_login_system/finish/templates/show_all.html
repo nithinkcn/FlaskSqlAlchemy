@@ -1,0 +1,68 @@
+<!--  <!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      
+      <h3>
+         <a href = "{{ url_for('show_all') }}">All items</a>
+      </h3>
+      
+      <hr/>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Price</th>
+               <th>Quantity</th>
+               <th>Total<th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for item in items %}
+               <tr>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.price }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.total }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      
+   </body>
+</html>
+-->
+
+{% extends 'layout.html' %}
+{% block body %}
+  <h3 class='text-center text-muted mb-3'>Nithin Store</h3>
+  <p class='text-right'><a href='{{url_for("show_all")}}' class='btn btn-success '>+Add items</a></p>
+  <table class='table table-bordered'>
+    <thead>
+      <th>S.No</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Total</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </thead>
+    <tbody>
+      {% for row in items %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{row.name}}</td>
+          <td>{{row.price}}</td>
+          <td>{{row.quantity}}</td>
+          <td>{{row.total}}</td>
+
+          <td><a href='#' class='btn btn-primary'>Edit</a></td>
+          <td><a href='{{url_for("delete",id=row.id)}}' class='btn btn-danger' onclick='return confirm("Are You Sure")'>Delete</a></td>   
+      
+        </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+{% endblock %}
