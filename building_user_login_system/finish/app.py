@@ -54,7 +54,12 @@ class AdditemForm(FlaskForm):
     quantity = IntegerField('quantity', validators=[InputRequired()])
     total = FloatField('total', validators=[InputRequired()])
 
-
+class EditForm(FlaskForm):
+   
+    name = StringField('name', validators=[InputRequired(), Length(min=4, max=15)])
+    price = FloatField('Price', validators=[InputRequired()])
+    quantity = IntegerField('quantity', validators=[InputRequired()])
+    total = FloatField('total', validators=[InputRequired()])
 
 @app.route('/')
 def index():
@@ -75,6 +80,8 @@ def login():
 
     return render_template('login.html', form=form)
 
+
+'''
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = RegisterForm()
@@ -88,6 +95,53 @@ def signup():
         return '<h1>New user has been created!</h1>'
 
     return render_template('signup.html', form=form)
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data, method='sha256')
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        if db.session.query(User).filter_by(username=new_user.username).count() < 1:
+            db.session.add(new_user)
+            db.session.commit()
+         
+            flash("Registration was successfull, please login")
+
+            return redirect(url_for('login'))
+        else:
+            return '<h1>Already registered</h1>'
+
+
+            #return '<h1>New user has been created!</h1>'
+
+    return render_template('signup.html', form=form)
+'''
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data, method='sha256')
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        if db.session.query(User).filter_by(username=new_user.username).count() < 1 and db.session.query(User).filter_by(email=new_user.email).count()<1:
+            db.session.add(new_user)
+            db.session.commit()
+         
+            flash("Registration was successfull, please login")
+
+            return redirect(url_for('login'))
+        else:
+            return '<h1>Already registered</h1>'
+
+
+            #return '<h1>New user has been created!</h1>'
+
+    return render_template('signup.html', form=form)
+
 
 @app.route('/dashboard')
 @login_required
@@ -123,8 +177,18 @@ def delete(id):
     db.session.commit()
     return redirect(url_for("show_all"))
         
- 
-   
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+    model = carts.query.get_or_404(id)
+    form = EditForm(obj=model)
+    if form.validate_on_submit():
+        model.name = form.name.data
+        model.price =form.price.data
+        model.quantity =form.quantity.data
+        model.total=form.total.data
+        db.session.commit()
+        return redirect(url_for('show_all'))
+    return render_template('edit.html', form=form,id =id)
 
 @app.route('/logout')
 @login_required
