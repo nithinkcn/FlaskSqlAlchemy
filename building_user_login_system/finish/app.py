@@ -74,7 +74,7 @@ def login():
         if user:
             if check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember.data)
-                return redirect(url_for('add_item'))
+                return redirect(url_for('show_all'))
 
         return '<h1>Invalid username or password</h1>'
 
