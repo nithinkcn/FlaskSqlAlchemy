@@ -131,14 +131,11 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
          
-            flash("Registration was successfull, please login")
+            #flash("Registration was successfull, please login")
 
             return redirect(url_for('login'))
         else:
             return '<h1>Already registered</h1>'
-
-
-            #return '<h1>New user has been created!</h1>'
 
     return render_template('signup.html', form=form)
 

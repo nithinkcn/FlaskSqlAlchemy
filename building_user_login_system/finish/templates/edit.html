@@ -14,7 +14,7 @@ Update items
 <div class="container">
 
   <form  method="POST" action="{{ url_for('edit', id=id) }}">
-    <h2 class="form-signin-heading">Add items</h2>
+    <h2 class="form-signin-heading">Update items</h2>
     {{ form.hidden_tag() }}
     {{ wtf.form_field(form.name) }}
     {{ wtf.form_field(form.price) }}
